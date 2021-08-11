@@ -1,4 +1,4 @@
-package ib.project.rest;
+package ib.project.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
