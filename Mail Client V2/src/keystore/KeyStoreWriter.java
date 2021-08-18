@@ -68,7 +68,7 @@ public class KeyStoreWriter {
 			e.printStackTrace();
 			System.err.println("\n[KeyStoreWriter - saveKeyStore] Greska prilikom snimanja KeyStore-a. Proveriti da li je putanja ispravna i da li je prosledjen dobra sifra za otvaranje KeyStore-a!\n");			
 		}
-	} 
+	}
 	
 	/**
 	 * Metoda sluzi za dodavanje novog para (sertifikat, javni kljuc) u KeyStore
@@ -81,7 +81,7 @@ public class KeyStoreWriter {
 	 */
 	public void addToKeyStore(KeyStore keyStore, String alias, PrivateKey privateKey, char[] password, Certificate certificate) {
 		try {
-			// postavljanje novog unosa u KeyStore pod zeljenim aliasom
+			// ppostavljanje novog unosa u KeyStore pod zeljenim aliasom
 			keyStore.setKeyEntry(alias, privateKey, password, new Certificate[] {certificate});
 		} catch (KeyStoreException e) {
 			e.printStackTrace();
