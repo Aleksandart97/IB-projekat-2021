@@ -58,7 +58,7 @@ public class KeyStoreReader {
 		} catch (KeyStoreException | NoSuchProviderException | NoSuchAlgorithmException | CertificateException | IOException e) {
 			e.printStackTrace();
 			System.err.println("\n[KeyStoreReader - readKeyStore] Greska prilikom ucitavanja KeyStore-a. Proveriti da li je putanja ispravna i da li je prosledjen dobra sifra za otvaranje KeyStore-a!\n");			
-		}
+		} 
 		
 		return keyStore;
 	}
