@@ -109,5 +109,5 @@ public class SignatureManager {
 		}
 		
 		return false;
-	}
+	}	
 }
