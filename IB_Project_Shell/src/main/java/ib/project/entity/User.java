@@ -1,34 +1,52 @@
 package ib.project.entity;
 
+import java.util.Collection;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.JoinColumn;
 
 
 @Entity
 @Table(name="users")
 public class User {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "Id")
 	private Long id;
+	
+	@Column(name = "email")
 	private String email;
+	
+	@Column(name = "password")
 	private String password;
+	
+	@Column(name = "certificate")
 	private String certificate;
+	
+	@Column(name = "active")
 	private Boolean active;
+	
+	@ManyToOne
+    @JoinColumn(name="authority_id")
 	private Authority authority;
 	
 	public User(){
 		
 	}
-	
-	
-	public User(Long id, String email, String password, String certificate, Boolean active, Authority authority) {
-		super();
-		this.id = id;
-		this.email = email;
-		this.password = password;
-		this.certificate = certificate;
-		this.active = active;
-		this.authority = authority;
-	}
+
 
 	public Long getId() {
 		return id;
@@ -69,14 +87,23 @@ public class User {
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-	
+
+
 	public Authority getAuthority() {
 		return authority;
 	}
-	
+
+
 	public void setAuthority(Authority authority) {
 		this.authority = authority;
 	}
+
+
+	
+
+	
+	
+	
 	
 	
 	

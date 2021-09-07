@@ -1,5 +1,7 @@
 package ib.project.service;
 
-public interface UserServiceInterface {
+import ib.project.dtos.LoginUserDto;
 
+public interface UserServiceInterface {
+	public boolean LoginUser(LoginUserDto loginUserDto);
 }

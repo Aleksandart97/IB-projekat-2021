@@ -76,11 +76,14 @@ public class WriteMailClient extends MailClient {
 			
 			//inicijalizacija za sifrovanje 
 			IvParameterSpec ivParameterSpec1 = IVHelper.createIV();
+			//inicijalizacija ciphera
 			aesCipherEnc.init(Cipher.ENCRYPT_MODE, secretKey, ivParameterSpec1);
 			
 			
 			//sifrovanje
 			byte[] ciphertext = aesCipherEnc.doFinal(compressedBody.getBytes());
+			
+			
 			String ciphertextStr = Base64.encodeToString(ciphertext);
 			System.out.println("Kriptovan tekst: " + ciphertextStr);
 			
@@ -92,10 +95,12 @@ public class WriteMailClient extends MailClient {
 			
 			//sifrovanje subjecta
 			byte[] ciphersubject = aesCipherEnc.doFinal(compressedSubject.getBytes());
+			
+			
 			String ciphersubjectStr = Base64.encodeToString(ciphersubject);
 			System.out.println("Kriptovan subject: " + ciphersubjectStr);
 			
-			//Sifrovanje tajnog kljuca javnim kljucem
+			//Sifrovanje tajnog/session kljuca javnim kljucem
 			Cipher rsaCipherEnc = Cipher.getInstance("RSA/ECB/PKCS1Padding");
 			rsaCipherEnc.init(Cipher.ENCRYPT_MODE, publicKeyUserB);
 			byte[] cipherKey = rsaCipherEnc.doFinal(secretKey.getEncoded());
@@ -111,15 +116,15 @@ public class WriteMailClient extends MailClient {
 			
 			//Potpisivanje
 			
-			//Creating a Signature object
-			Signature signature = Signature.getInstance("SHA1withRSA");
+			//Creating a Signature object sa odredjenim algoritmom
+			Signature signature = Signature.getInstance("SHA256withRSA");
 			
 			//Initialize the signature
 		    signature.initSign(privateKeyUserA);
 		  
 		    byte[] bytes = ciphertext;
 		    
-		    //Adding data to the signature
+		    //Adding data to the signature // add the received message bytes to the signature object by invoking the update method
 		    signature.update(bytes);
 		    
 		    //Calculating the signature

@@ -86,6 +86,8 @@ public class ReadMailClient extends MailClient {
 	    String answerStr = reader.readLine();
 	    Integer answer = Integer.parseInt(answerStr);
 	    
+	    
+	   // poruka pod odredjenim brojem
 		MimeMessage chosenMessage = mimeMessages.get(answer);
 		
 		//
@@ -98,7 +100,7 @@ public class ReadMailClient extends MailClient {
 		byte [] entriptedKey = mailBody.getEncKeyBytes();
 		byte [] signature = mailBody.getSignatureBytes();
 		
-		//citanje
+		//citanje keystora
 		KeyStoreReader keyStoreReader = new KeyStoreReader();
 		KeyStore keyStoreUserB = keyStoreReader.readKeyStore(KEY_STORE_USER_B, KEY_STORE_USER_B_PASS.toCharArray());
 		
@@ -125,6 +127,7 @@ public class ReadMailClient extends MailClient {
 		//string u byte
 		byte[] encriptedMessageDec = Base64.decode(encriptedMessage);
 		
+		//dekripcija poruke
 		Cipher bodyCipherDec = Cipher.getInstance("AES/CBC/PKCS5Padding");
 		bodyCipherDec.init(Cipher.DECRYPT_MODE, secretKey, ivP1);
 		String receivedBodyTxt = new String(bodyCipherDec.doFinal(encriptedMessageDec));
@@ -141,45 +144,30 @@ public class ReadMailClient extends MailClient {
 		String decompressedSubjectTxt = GzipUtil.decompress(Base64.decode(decryptedSubjectTxt));
 		System.out.println("Subjectt: " + decompressedSubjectTxt);
 		
-		//validate(publicKeyUserB, encriptedMessageDec, signature);
-		
-//		public static boolean validate(PublicKey publicKey,
-//				 byte[] data, byte[] sign) throws Exception {
-//			       Signature signature = Signature.getInstance("SHA1withRSA");
-//			       signature.initVerify(publicKey);
-//			       signature.update(data);
-//			       boolean verified = signature.verify(sign);
-//			       if (verified==true) {
-//			    	   System.out.println("This email is valid with its signature.");
-//			       }else {
-//			    	   System.out.println("This email is not valid, not compatible signature.");
-//			       }
-//			        return verified;
-//			}	
-		
-		//Verifying the signature
 		
 
 		Certificate certificateUserA = keyStoreReader.getCertificateFromKeyStore(keyStoreUserB, KEY_STORE_USER_B_ALIAS);
 		PublicKey publicKeyUserA = keyStoreReader.getPublicKeyFromCertificate(certificateUserA);
 		
-		Signature sign = Signature.getInstance("SHA1withRSA");
-
-		//Calculating the signature
-	      byte[] signature2 = sign.sign();      
-	      
-	      //Initializing the signature
-	      sign.initVerify(publicKeyUserA);
-	      //sign.update(bytes);
-	      
-	      //Verifying the signature
-	      boolean bool = sign.verify(signature);
-	      
-	      if(bool) {
-	         System.out.println("Signature verified");   
-	      } else {
-	         System.out.println("Signature failed");
-	      }
+//		Signature sign1 = Signature.getInstance("SHA256withRSA");
+//
+//		//Calculating the signature
+//	      byte[] signature2 = sign1.sign();      
+//	      
+//	      //Initializing the signature object for verification by calling initVerify method
+//	      sign1.initVerify(publicKeyUserA);
+//	      
+//	      byte[] bytes = 
+//	      sign1.update(bytes);
+//	      
+//	      //Verifying the signature
+//	      boolean bool = sign1.verify(signature);
+//	      
+//	      if(bool == true) {
+//	         System.out.println("Signature verified");   
+//	      } else {
+//	         System.out.println("Signature failed");
+//	      }
 		//
 		
 	    
