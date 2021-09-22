@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -36,6 +37,7 @@ import support.MailHelper;
 import support.MailReader;
 import util.Base64;
 import util.GzipUtil;
+import util.SignatureManager;
 
 public class ReadMailClient extends MailClient {
 
@@ -99,6 +101,7 @@ public class ReadMailClient extends MailClient {
 		String encriptedMessage = mailBody.getEncMessage();
 		byte [] entriptedKey = mailBody.getEncKeyBytes();
 		byte [] signature = mailBody.getSignatureBytes();
+		byte [] encriptedMessageBytes = mailBody.getEncMessageBytes();
 		
 		//citanje keystora
 		KeyStoreReader keyStoreReader = new KeyStoreReader();
@@ -149,16 +152,35 @@ public class ReadMailClient extends MailClient {
 		Certificate certificateUserA = keyStoreReader.getCertificateFromKeyStore(keyStoreUserB, KEY_STORE_USER_B_ALIAS);
 		PublicKey publicKeyUserA = keyStoreReader.getPublicKeyFromCertificate(certificateUserA);
 		
+		
+		
+//		if(SignatureManager.verify(encriptedMessageBytes, signature, publicKeyUserA))
+//			System.out.println("Signature verified");
+//		else
+//			System.out.println("Signature failed");
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 //		Signature sign1 = Signature.getInstance("SHA256withRSA");
 //
 //		//Calculating the signature
 //	      byte[] signature2 = sign1.sign();      
 //	      
 //	      //Initializing the signature object for verification by calling initVerify method
-//	      sign1.initVerify(publicKeyUserA);
+//		  sign1.initVerify(publicKeyUserA);
 //	      
-//	      byte[] bytes = 
-//	      sign1.update(bytes);
+//		  sign1.update(signature2);
 //	      
 //	      //Verifying the signature
 //	      boolean bool = sign1.verify(signature);
@@ -168,7 +190,8 @@ public class ReadMailClient extends MailClient {
 //	      } else {
 //	         System.out.println("Signature failed");
 //	      }
-		//
+//		
+		
 		
 	    
         //TODO: Decrypt a message and decompress it. The private key is stored in a file.
