@@ -94,6 +94,8 @@ public class ReadMailClient extends MailClient {
 		
 		//
 		
+		SignatureManager signatureManager = new SignatureManager();
+		
 		//mail body izvucen
 		MailBody mailBody = new MailBody(MailHelper.getText(chosenMessage));
 		
@@ -102,6 +104,11 @@ public class ReadMailClient extends MailClient {
 		byte [] entriptedKey = mailBody.getEncKeyBytes();
 		byte [] signature = mailBody.getSignatureBytes();
 		byte [] encriptedMessageBytes = mailBody.getEncMessageBytes();
+		
+		
+		System.out.println("-----------------------------------------------------------------------");
+		System.out.println("Signature: " + signature);
+		System.out.println("-----------------------------------------------------------------------");
 		
 		//citanje keystora
 		KeyStoreReader keyStoreReader = new KeyStoreReader();
@@ -128,16 +135,16 @@ public class ReadMailClient extends MailClient {
 		SecretKey secretKey = new SecretKeySpec(secretKeyDec, "AES");
 		
 		//string u byte
-		byte[] encriptedMessageDec = Base64.decode(encriptedMessage);
+		//byte[] encriptedMessageDec = Base64.decode(encriptedMessage);
 		
 		//dekripcija poruke
 		Cipher bodyCipherDec = Cipher.getInstance("AES/CBC/PKCS5Padding");
 		bodyCipherDec.init(Cipher.DECRYPT_MODE, secretKey, ivP1);
-		String receivedBodyTxt = new String(bodyCipherDec.doFinal(encriptedMessageDec));
+		String receivedBodyTxt = new String(bodyCipherDec.doFinal(encriptedMessageBytes));
 		
 		//dekompresija tela poruke
 		String decompressedBodyText = GzipUtil.decompress(Base64.decode(new String(receivedBodyTxt)));
-		System.out.println("Body: " + decompressedBodyText);
+		System.out.println("Body--: " + decompressedBodyText);
 		
 		//dektipcija subjecta
 		bodyCipherDec.init(Cipher.DECRYPT_MODE, secretKey, ivP2);
@@ -152,12 +159,14 @@ public class ReadMailClient extends MailClient {
 		Certificate certificateUserA = keyStoreReader.getCertificateFromKeyStore(keyStoreUserB, KEY_STORE_USER_B_ALIAS);
 		PublicKey publicKeyUserA = keyStoreReader.getPublicKeyFromCertificate(certificateUserA);
 		
+		byte[] data = receivedBodyTxt.getBytes();
 		
-		
-//		if(SignatureManager.verify(encriptedMessageBytes, signature, publicKeyUserA))
-//			System.out.println("Signature verified");
-//		else
-//			System.out.println("Signature failed");
+		boolean isSignatureValid = signatureManager.verify(data, signature, publicKeyUserA);
+		if (isSignatureValid == true) {
+			System.out.println("Signature is valid");
+		}else {
+			System.out.println("Signature is not valid");
+		}
 		
 		
 		
@@ -194,7 +203,7 @@ public class ReadMailClient extends MailClient {
 		
 		
 	    
-        //TODO: Decrypt a message and decompress it. The private key is stored in a file.
+       
 		
 //		
 //		byte[] iv1 = JavaUtils.getBytesFromFile(IV1_FILE);
